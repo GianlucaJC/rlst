@@ -56,7 +56,7 @@
 		<form method='post' action="{{ route('documenti_utili') }}" id='frm_documenti1' name='frm_documenti1' autocomplete="off">
 			<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
 			<input type="hidden" value="{{url('/')}}" id="url" name="url">
-			
+
         <div class="row">
           <div class="col-md-12">
 		  
