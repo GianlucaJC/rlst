@@ -64,7 +64,7 @@
 					<thead>
 						<tr>
 							<th>Data ora</th>
-							<th>Tessera</th>
+							
 							<th>Operatore</th>
 							<th>Territorio operatore</th>
 							<th>Motivo visita</th>
@@ -83,9 +83,7 @@
 								<td>
 									{{ $documento->created_at}}
 								</td>
-								<td>
-									{{ $utenti[$documento->id_funzionario] }}
-								</td>
+
 								<td>
 								<?php
 									if (isset($infotessere[$utenti[$documento->id_funzionario]])) 
@@ -137,7 +135,7 @@
 					<tfoot>
 						<tr>
 							<th>Data ora</th>
-							<th>Tessera</th>
+							
 							<th>Operatore</th>
 							<th>Territorio operatore</th>
 							<th>Motivo visita</th>
@@ -158,6 +156,9 @@
         </div>
 		
 		<button type="button" class="mt-2 btn btn-primary btn-lg btn-block" onclick='newdoc()'>Nuova Visita</button>
+
+		<button type="button" class="mt-2 btn btn-info btn-lg" onclick="$('.cercacol').show(220)">Ricerche</button>
+
 		</form>
 		
 		
@@ -300,7 +301,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.543"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.570"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>

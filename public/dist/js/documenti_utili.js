@@ -25,17 +25,18 @@ $(document).ready( function () {
     $('#tbl_list_doc tfoot th').each(function () {
         var title = $(this).text();
 		if (title.length!=0)
-			$(this).html('<input type="text" placeholder="' + title + '" />');
+			$(this).html('<input class="cercacol" style="display:none" type="text" placeholder="' + title + '" />');
     });	
     var table=$('#tbl_list_doc').DataTable({
-		"order": [[ 0, 'desc' ]],
-		pageLength: 20,
-		lengthMenu: [10, 15, 20, 50, 100, 200, 500],
-
-		pagingType: 'full_numbers',		
 		dom: 'Bfrtip',
+		"order": [[ 0, 'desc' ]],
+		pageLength: 10,
+		lengthMenu: [
+		[10, 20, 50, 100, -1],
+		[ '10 visite', '20 visite', '50 visite', '100 visite', 'Tutte' ]
+		],
 		buttons: [
-			'excel'
+			'excel','pageLength'
 		],		
         initComplete: function () {
             // Apply the search
@@ -52,15 +53,27 @@ $(document).ready( function () {
                 });
         },
         language: {
+			buttons: {
+				pageLength: 'Numero visite per pagina %d'
+			},			
+			search: "Cerca globalmente",
             lengthMenu: 'Visualizza _MENU_ visite per pagina',
             zeroRecords: 'Nessuna visita trovata',
             info: 'Pagina _PAGE_ di _PAGES_',
             infoEmpty: 'Non sono presenti visite',
-            infoFiltered: '(Filtrati da _MAX_ visite totali)',
+            infoFiltered: '(Filtrati da _MAX_ visite totali)',			
+			"paginate": {
+				"first":      "Primo",
+				"last":       "Ultimo",
+				"next":       "Successivo",
+				"previous":   "Precedente"
+			},			
         },
 
 		
     });
+	
+	$('.dataTables_length').show();  
 
 
 	
