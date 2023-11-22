@@ -80,7 +80,11 @@ $(document).ready( function () {
 } );
 
 
-function newdoc() {
+function docins(value) {
+	$("#id_v").val(value)
+	$('#modalvalue').find('input:text').val('');
+	$("#data_visita").val('')
+	
 	html=""
 	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
 	$("#title_doc").html("Definizione della visita")
@@ -88,6 +92,37 @@ function newdoc() {
 	$("#div_save").empty()
 	$('#modalvalue').modal('show')	
 	$("#nomefile").val('')
+	filename=$("#id_ref"+value).data("filename")
+	
+
+	
+	if (value==0) {
+	} else {
+
+		$("#motivo_visita").val($("#id_ref"+value).data("motivo_visita"))
+		$("#data_visita").val($("#id_ref"+value).data("data_visita"))
+		$("#indirizzo").val($("#id_ref"+value).data("indirizzo"))
+		$("#istat").val($("#id_ref"+value).data("istat"))
+		$("#cap").val($("#id_ref"+value).data("cap"))
+		$("#provincia").val($("#id_ref"+value).data("provincia"))
+		$("#frazione").val($("#id_ref"+value).data("frazione"))
+		$("#select_azienda").val($("#id_ref"+value).data("azienda"))
+		$("#azienda").val($("#id_ref"+value).data("azienda"))
+		$("#note").val($("#id_ref"+value).data("note"))
+
+		/*
+		data-motivo_visita='{{ $documento->motivo_visita }}'
+		data-data_visita='{{ $documento->data_visita }}'
+		data-indirizzo='{{ $documento->indirizzo }}'
+		data-cap='{{ $documento->cap }}'
+		
+		
+		data-provincia='{{ $documento->provincia }}'
+		data-frazione='{{ $documento->frazione }}'
+		data-azienda='{{ $documento->azienda }}'
+		data-note='{{ $documento->note }}'
+		*/		
+	}								
 
 	/*
 	$('.lista').select2({
@@ -122,8 +157,16 @@ function newdoc() {
 		html="<button id='btn_save' name='btn_save' type='submit' class='btn btn-primary'>Salva</button>";
 		//saveinfodoc() in demo-config.js
 
-		
+		$("#allegato_dele_id").val('')
 		$("#div_save").html(html);		
+		$("#div_send_allegati").show()
+		$("#div_elimina_allegati").hide()
+		if (filename && filename.length>0) {
+			$("#allegato_dele_id").val(value)
+			$("#div_send_allegati").hide()
+			$("#div_elimina_allegati").show()	
+			
+		}
 	})
 	.catch(status, err => {
 		

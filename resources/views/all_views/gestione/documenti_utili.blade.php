@@ -66,14 +66,18 @@
 							<th>Data ora</th>
 							
 							<th>Operatore</th>
-							<th>Territorio operatore</th>
+							<th>Regione</th>
+							<th>Territorio</th>
 							<th>Motivo visita</th>
 							<th>Data visita</th>
 							<th>Indirizzo</th>
 							<th>Cap-Comune-Provincia</th>
+							<th>Frazione</th>
+							<th>Azienda</th>
 							<th>Note</th>
 							<th>Documento</th>
-							<th>Elimina</th>
+							<th>Mod</th>
+							<th>Canc</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -94,10 +98,34 @@
 
 								<td>
 									<?php
-										if (isset($info_ter[$documento->id_prov])) 
-											echo $info_ter[$documento->id_prov];
+										if (isset($info_ter[$documento->id_prov]['regione'])) 
+											echo $info_ter[$documento->id_prov]['regione']
+										;
 									?>
 								</td>
+								<td>
+									<?php
+										if (isset($info_ter[$documento->id_prov]['territorio'])) 
+											echo $info_ter[$documento->id_prov]['territorio']
+										;
+									?>
+								</td>
+								
+								<span id='id_ref{{$documento->id}}'
+									data-filename='{{ $documento->filename }}'
+									data-motivo_visita='{{ $documento->motivo_visita }}'
+									data-data_visita='{{ $documento->data_visita }}'
+									data-indirizzo='{{ $documento->indirizzo }}'
+									data-istat='{{ $documento->istat }}'
+									data-cap='{{ $documento->cap }}'
+									
+									
+									data-provincia='{{ $documento->provincia }}'
+									data-frazione='{{ $documento->frazione }}'
+									data-azienda='{{ $documento->azienda }}'
+									data-note='{{ $documento->note }}'
+								>
+								</span>	
 
 
 								<td>{{ $documento->motivo_visita }}</td>
@@ -108,6 +136,8 @@
 									{{ $documento->comune }}-
 									{{ $documento->provincia }}
 								</td>
+								<td>{{ $documento->frazione }}</td>
+								<td>{{ $documento->azienda }}</td>
 								<td>{{ $documento->note }}</td>
 
 								<td>
@@ -122,12 +152,19 @@
 
 								<td>
 								@if ($documento->id_funzionario==$ref_user)
+									<a href='#' onclick='docins({{$documento->id}})'
+										<button type="submit" name='dele_ele' class="btn btn-info"><i class="fas fa-edit"></i></button>	
+									</a>
+								@endif
+								</td>
+
+								<td>
+								@if ($documento->id_funzionario==$ref_user)
 									<a href='#' onclick="dele_element({{$documento->id}})">
 										<button type="submit" name='dele_ele' class="btn btn-danger"><i class="fas fa-trash"></i></button>	
 									</a>
-									@endif
+								@endif
 								</td>
-
 							</tr>
 						@endforeach
 						
@@ -137,13 +174,17 @@
 							<th>Data ora</th>
 							
 							<th>Operatore</th>
-							<th>Territorio operatore</th>
+							<th>Regione</th>
+							<th>Territorio</th>
 							<th>Motivo visita</th>
 							<th>Data visita</th>
 							<th>Indirizzo</th>
 							<th>Cap-Comune-Provincia</th>
+							<th>Frazione</th>
+							<th>Azienda</th>
 							<th>Note</th>
 							<th>Documento</th>
+							<th></th>
 							<th></th>
 						</tr>
 					</tfoot>					
@@ -155,7 +196,7 @@
 
         </div>
 		
-		<button type="button" class="mt-2 btn btn-primary btn-lg btn-block" onclick='newdoc()'>Nuova Visita</button>
+		<button type="button" class="mt-2 btn btn-primary btn-lg btn-block" onclick='docins(0)'>Nuova Visita</button>
 
 		<button type="button" class="mt-2 btn btn-info btn-lg" onclick="$('.cercacol').show(220)">Ricerche</button>
 
@@ -167,6 +208,7 @@
 		<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
 		<input type='hidden' name='nomefile' id='nomefile'>
 		<input type='hidden' name='save_frm' id='save_frm'>
+		<input type='hidden' name='id_v' id='id_v'>
 		  <!-- Modal -->
 		<div class="modal fade bd-example-modal-lg" id="modalvalue" tabindex="-1" role="dialog" aria-labelledby="title_doc" aria-hidden="true">
 		  <div class="modal-dialog modal-lg">
@@ -181,7 +223,7 @@
 				...
 			  </div>
 				<div class="modal-body">
-				
+		
 
 					<div class="row mb-3">
 						<!-- div disattivato !-->		
@@ -202,9 +244,9 @@
 					
 					<div class="row mb-3">			
 						<input type='hidden' name='comune' id='comune'>
-						<div class="col-md-12">
+						<div class="col-md-6">
 							<div class="form-floating">
-							<select class='form-select  lista' id='localita' aria-label='Loc' name='localita' required onchange="set_loc(this.value)" >
+							<select class='form-select  lista' id='istat' aria-label='Loc' name='istat' required onchange="set_loc(this.value)" >
 								<option value=''>Select...</option>
 								@foreach($all_loc as $loc)
 									<option value="{{$loc->istat}}"
@@ -212,9 +254,16 @@
 								@endforeach
 							</select>
 								
-							<label for="localita">Località*</label>
+							<label for="istat">Comune*</label>
 							</div>
 						</div>
+						<div class="col-md-6">
+							<div class="form-floating">
+								<input class="form-control" id="frazione" name='frazione' type="text" placeholder="Località, frazione"  required value="{{$appalti[0]->frazione ?? ''}}" />
+								<label for="frazione">Frazione*</label>
+							</div>
+						</div>
+						
 					</div>
 					
 					<div class="row mb-3">
@@ -237,6 +286,29 @@
 							</div>
 						</div>					
 					</div>
+
+					<div class="row mb-3">			
+						<div class="col-md-6">
+							<div class="form-floating">
+							<select class='form-select' id='select_azienda' aria-label='Azienda' name='select_azienda' onchange="$('#azienda').val(this.value)" >
+								<option value=''>Select...</option>
+								@foreach($aziende as $impresa)
+									<option value="{{$impresa->denom}}"
+									>{{$impresa->denom}}</option>
+								@endforeach
+							</select>
+								
+							<label for="select_azienda">Seleziona Azienda</label>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-floating">
+								<input class="form-control" id="azienda" name='azienda' type="text" placeholder="Azienda"  required value="{{$appalti[0]->azienda ?? ''}}" />
+								<label for="azienda">Azienda*</label>
+							</div>
+						</div>
+						
+					</div>	
 
 					<div class="row mb-3">
 						<div class="col-md-12">
@@ -301,7 +373,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.570"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.582"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
