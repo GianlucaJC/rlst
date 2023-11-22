@@ -53,8 +53,10 @@ public function __construct()
 		else
 			$doc=documenti_utili::find($id_v);
 		
-		$doc->filename=$request->input("nomefile");
-		$doc->url_completo="allegati/documenti_utili/".$request->input("nomefile");
+		if ($id_v=="0" || strlen($id_v)==0) {
+			$doc->filename=$request->input("nomefile");
+			$doc->url_completo="allegati/documenti_utili/".$request->input("nomefile");
+		}
 		$doc->id_funzionario=$this->id_user;
 		$doc->id_prov=$this->id_prov_associate;
 		$doc->motivo_visita=$request->input("motivo_visita");
@@ -120,8 +122,7 @@ public function __construct()
 		$infotessere=$this->infotessere();
 		
 		$dele_contr=$request->input("dele_contr");
-		$save_frm=$request->input("save_frm");
-		if ($save_frm=="save") $this->saveinfo();
+
 
 		$save_frm=$request->input("save_frm");
 		if ($save_frm=="save") $this->saveinfo();
