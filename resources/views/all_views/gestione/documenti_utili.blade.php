@@ -373,7 +373,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.582"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.584"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>

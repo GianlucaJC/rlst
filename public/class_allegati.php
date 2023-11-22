@@ -15,7 +15,7 @@
 </svg>	
 <div id="sez_allegati" style="" class="mt-2">
 	<div id='div_elimina_allegati' style='display:none'>
-		<button type="submit" onclick="if (!confirm('Sicuri di eliminare la visita?')) return event.preventDefault()" class="btn btn-danger" >Elimina allegato</button>
+		<button type="submit" onclick="if (!confirm('Sicuri di eliminare la visita?')) return event.preventDefault()" name='btn_dele_allegato' value='dele' class="btn btn-danger" >Elimina allegato</button>
 		<input type='hidden' name='allegato_dele_id' id="allegato_dele_id">
 	</div>
 	

@@ -53,7 +53,7 @@ public function __construct()
 		else
 			$doc=documenti_utili::find($id_v);
 		
-		if ($id_v=="0" || strlen($id_v)==0) {
+		if (strlen($request->input("nomefile"))!=0) {
 			$doc->filename=$request->input("nomefile");
 			$doc->url_completo="allegati/documenti_utili/".$request->input("nomefile");
 		}
@@ -127,8 +127,9 @@ public function __construct()
 		$save_frm=$request->input("save_frm");
 		if ($save_frm=="save") $this->saveinfo();
 		
-		$allegato_dele_id=$request->input("allegato_dele_id");
-		if (strlen($allegato_dele_id)!=0) {
+		$btn_dele_allegato=$request->input("btn_dele_allegato");
+		if ($btn_dele_allegato=="dele") {
+			$allegato_dele_id=$request->input("allegato_dele_id");
 			documenti_utili::where('id', $allegato_dele_id)
 			  ->update(['filename' => null,'file_user'=>null, 'url_completo'=>null]);			
 		}
