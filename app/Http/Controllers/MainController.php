@@ -20,7 +20,12 @@ class mainController extends Controller
 private $id_user;
 private $utentefillea;
 private $id_prov_associate;
+private $regione_associata;
 private $tb_default;
+private $admin_pro;
+private $admin_reg;
+private $admin_naz;
+
 
 public function __construct()
 	{
@@ -30,21 +35,43 @@ public function __construct()
 			$id=Auth::user()->id;
 			$user = User::from('users as u')
 			->where('u.id','=',$id)
-			->join('online.db','db.N_TESSERA','u.name')
 			->get();
 			
 			if (isset($user[0])) {
 				$this->id_user=$id;
-				$this->utentefillea=$user[0]->UTENTEFILLEA;
+				$this->utentefillea=$user[0]->utentefillea;
 				$this->id_prov_associate=$user[0]->id_prov_associate;
 				$this->tb_default=$user[0]->tb_default;
+				$this->admin_pro=$user[0]->admin_pro;
+				$this->admin_reg=$user[0]->admin_reg;
+				$this->admin_naz=$user[0]->admin_naz;
+				$reg_a=$this->regione_ass($this->id_prov_associate);
+				$this->regione_associata=$reg_a;
 			}
 			return $next($request);
 		});		
 		
 	}	
 
-
+	public function regione_ass($id_prov) {
+		$reg=DB::table('bdf.province')
+		->select('id_regione')
+		->where('id',"=",$id_prov)
+		->get();
+		$regione=0;
+		if (isset($reg[0])) $regione=$reg[0]->id_regione;
+		return $regione;
+	}
+	
+	public function prov_in_reg($id_regione) {
+		$ids=DB::table('bdf.province')
+		->select('id')
+		->where('id_regione',"=",$id_regione)
+		->get();
+		return $ids;
+	}
+	
+	
 	public function saveinfo() {
 		$request=request();
 		$id_v=$request->input("id_v");
@@ -73,14 +100,11 @@ public function __construct()
 	}
 
 	public function infotessere() {
-		$users=DB::table('online.db')
-		->select('id','N_TESSERA','UTENTEFILLEA')
-		->where('attiva','=',1)
-		->get();
+		$users=User::select('id','name','utentefillea')->get();
 		$info=array();
 		
 		foreach ($users as $us) {
-			$info[$us->N_TESSERA]=$us->UTENTEFILLEA;
+			$info[$us->name]=$us->utentefillea;
 		}	
 		return $info;		
 	}
@@ -140,9 +164,35 @@ public function __construct()
 			$doc_remove=$doc->url_completo;
 			@unlink($doc_remove);
 		}		
+		
+		$id_prov_associate=$this->id_prov_associate;
+		$tb_default=$this->tb_default;
+		$reg_ref=substr($tb_default,3,4);
+		$admin_pro=$this->admin_pro;
+		$admin_reg=$this->admin_reg;
+		$admin_naz=$this->admin_naz;
+		$cond=0;
+		$ids=array();
+		if ($admin_reg==1) {
+			$cond=1;
+			$regx=$this->prov_in_reg($this->regione_associata);
+			foreach($regx as $rr) {
+				$ids[]=$rr->id;
+			}
+		}	
+		if ($admin_naz==1) $cond=2;
+		
+
+		
 		$documenti_utili = DB::table('documenti_utili as d')
 		->select('d.*')
 		->where('d.dele','=',0)
+		->when($cond==0, function ($documenti_utili) use ($id_prov_associate) {	
+			return $documenti_utili->where('d.id_prov', "=",$id_prov_associate);
+		})
+		->when($cond==1, function ($documenti_utili) use ($ids) {
+			return $documenti_utili->whereIn('id_prov',$ids);
+		})		
 		->orderBy("d.created_at","desc")->get();
 		
 		$all_loc=italy_cities::select("comune","cap","istat","provincia")

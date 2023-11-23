@@ -29,7 +29,7 @@ $(document).ready( function () {
     });	
     var table=$('#tbl_list_doc').DataTable({
 		dom: 'Bfrtip',
-		"order": [[ 0, 'desc' ]],
+		"order": [[ 1, 'desc' ]],
 		pageLength: 10,
 		lengthMenu: [
 		[10, 20, 50, 100, -1],
@@ -61,7 +61,7 @@ $(document).ready( function () {
             zeroRecords: 'Nessuna visita trovata',
             info: 'Pagina _PAGE_ di _PAGES_',
             infoEmpty: 'Non sono presenti visite',
-            infoFiltered: '(Filtrati da _MAX_ visite totali)',			
+            infoFiltered: '(_TOTAL_ filtrati da _MAX_ visite totali)',			
 			"paginate": {
 				"first":      "Primo",
 				"last":       "Ultimo",

@@ -63,8 +63,8 @@
 				<table id='tbl_list_doc' class="display">
 					<thead>
 						<tr>
+							<th>#</th>
 							<th>Data ora</th>
-							
 							<th>Operatore</th>
 							<th>Regione</th>
 							<th>Territorio</th>
@@ -81,9 +81,13 @@
 						</tr>
 					</thead>
 					<tbody>
-
+						@php ($progr=0)
 						@foreach($documenti_utili as $documento)
+							@php ($progr++)
 							<tr>
+								<td style='text-align:center'>
+									{{$progr}}
+								</td>
 								<td>
 									{{ $documento->created_at}}
 								</td>
@@ -171,6 +175,7 @@
 					</tbody>
 					<tfoot>
 						<tr>
+							<td></td>
 							<th>Data ora</th>
 							
 							<th>Operatore</th>
@@ -373,7 +378,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.584"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.588"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
