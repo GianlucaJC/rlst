@@ -15,8 +15,7 @@
         </div>
         <div class="info">
 		<?php
-		 $infouser=Auth::user()->name;
-		 if (isset($utentefillea)) $infouser="$utentefillea";
+		 $infouser=Auth::user()->utentefillea;
 		?>
           <a href="#" class="d-block">{{ $infouser}}</a>
         </div>
