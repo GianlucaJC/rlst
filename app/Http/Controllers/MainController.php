@@ -29,6 +29,8 @@ private $admin_naz;
 
 public function __construct()
 	{
+		//echo "------------------------------------------------------------->pw: ".bcrypt('123456');
+		
 		$this->middleware('auth')->except(['index']);
 
 		$this->middleware(function ($request, $next) {			
