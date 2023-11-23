@@ -1,6 +1,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
+	
     <a href="{{ route('dashboard') }}" class="brand-link">
       <img src="{{ URL::asset('/') }}dist/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">FilleaOffice</span>
@@ -112,6 +113,9 @@
           </li>
 		  
 		  </ul>
+		  <hr>
+			
+			<img style="width:100%" src='{{ URL::asset('/') }}dist/img/rlst.png?ver=1.1'>  
 		  </div>
 		  
 
