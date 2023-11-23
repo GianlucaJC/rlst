@@ -32,7 +32,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Elenco visite effettuate</h1>
+            <h1 class="m-0">Elenco visite</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -64,15 +64,15 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Data ora</th>
-							<th>Operatore</th>
+							<th>Data ora creazione</th>
+							<th>RLST</th>
 							<th>Regione</th>
 							<th>Territorio</th>
 							<th>Motivo visita</th>
 							<th>Data visita</th>
-							<th>Indirizzo</th>
 							<th>Cap-Comune-Provincia</th>
 							<th>Frazione</th>
+							<th>Indirizzo</th>
 							<th>Azienda</th>
 							<th>Note</th>
 							<th>Documento</th>
@@ -134,13 +134,13 @@
 
 								<td>{{ $documento->motivo_visita }}</td>
 								<td>{{ $documento->data_visita }}</td>
-								<td>{{ $documento->indirizzo }}</td>
 								<td>
 									{{ $documento->cap }}-
 									{{ $documento->comune }}-
 									{{ $documento->provincia }}
 								</td>
 								<td>{{ $documento->frazione }}</td>
+								<td>{{ $documento->indirizzo }}</td>
 								<td>{{ $documento->azienda }}</td>
 								<td>{{ $documento->note }}</td>
 
@@ -176,16 +176,16 @@
 					<tfoot>
 						<tr>
 							<td></td>
-							<th>Data ora</th>
+							<th>Data ora creazione</th>
 							
-							<th>Operatore</th>
+							<th>RLST</th>
 							<th>Regione</th>
 							<th>Territorio</th>
 							<th>Motivo visita</th>
 							<th>Data visita</th>
-							<th>Indirizzo</th>
 							<th>Cap-Comune-Provincia</th>
 							<th>Frazione</th>
+							<th>Indirizzo</th>
 							<th>Azienda</th>
 							<th>Note</th>
 							<th>Documento</th>
